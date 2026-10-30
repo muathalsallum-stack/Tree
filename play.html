@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b2a2d">
+<title>شارك بقرارك – شجرة القرار الإيجابي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#f3fbf8;--muted:#b9d6d0;--glass:rgba(9,45,50,.72);--line:rgba(190,240,232,.32);
+  --mint:#7df0c2;--leaf:#8fe36a;--sun:#f4c54a;--ok:#7fe39a;--bad:#ff8b7b;
+  --f-display:"Cairo","IBM Plex Sans Arabic",Tahoma,sans-serif;--f-body:"IBM Plex Sans Arabic","Cairo",Tahoma,sans-serif;
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:#0b1a1c}
+body{margin:0;min-height:100vh;min-height:100dvh;color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  background:radial-gradient(120% 60% at 85% 100%,rgba(244,197,74,.25),transparent 60%),radial-gradient(90% 60% at 50% 110%,rgba(80,170,80,.45),transparent 70%),linear-gradient(160deg,#0f1517 0%,#123236 45%,#1f5d64 80%,#3f8f8f 100%);
+  background-attachment:fixed;
+  padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{text-align:center}
+header h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:30px;line-height:1.2;
+  background:linear-gradient(180deg,#d9fff0,#7df0c2 45%,#2fc4c4);-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{margin:0;font-family:var(--f-display);font-weight:700;color:#fff;opacity:.9;font-size:15px}
+.card{background:var(--glass);border:1.5px solid var(--line);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:14px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.hero{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.hero b{font-family:var(--f-display);font-weight:900;font-size:46px;line-height:1.1}
+.hero svg{width:84px;height:84px;filter:drop-shadow(0 0 16px rgba(125,240,194,.6))}
+.lead{margin:0;color:var(--muted);text-align:center}
+.eyebrow{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;color:var(--sun);font-weight:700;font-size:14px}
+.dots{display:flex;gap:4px}
+.dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid var(--line)}
+.dots i.on{background:var(--leaf);border-color:var(--leaf)}.dots i.miss{background:transparent;border-color:var(--bad)}
+.q{margin:0;font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.5}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;text-align:right;color:var(--ink);cursor:pointer;background:rgba(255,255,255,.07);border:1.5px solid var(--line);border-radius:16px;
+  padding:13px 14px;display:flex;gap:12px;align-items:center;min-height:56px;-webkit-tap-highlight-color:transparent}
+.opt:active{transform:scale(.99)}
+.opt .k{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);font-weight:700}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:rgba(127,227,154,.2)}
+.opt.wrong{border-color:var(--bad);background:rgba(255,139,123,.16)}
+.opt.dim{opacity:.45}
+.fb{border-radius:16px;padding:12px 14px;background:rgba(0,0,0,.25);border:1px solid var(--line);font-size:15.5px}
+.fb strong{display:block;font-family:var(--f-display);font-size:18px}
+.fb.good strong{color:var(--ok)}.fb.bad strong{color:var(--bad)}
+.btn{font:inherit;font-family:var(--f-display);font-weight:800;font-size:22px;cursor:pointer;border:none;border-radius:16px;padding:12px 20px;width:100%;
+  background:linear-gradient(180deg,#a9f7cf,#4fd6b4);color:#06302c;box-shadow:0 6px 20px rgba(79,214,180,.35)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);box-shadow:none;font-size:18px}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.big{font-family:var(--f-display);font-weight:900;font-size:64px;line-height:1;color:var(--sun);text-align:center}
+.status{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;border-radius:14px;padding:12px;text-align:center;font-weight:700}
+.status.wait{background:rgba(255,255,255,.08)}.status.ok{background:rgba(127,227,154,.18);color:var(--ok)}.status.err{background:rgba(255,139,123,.15);color:var(--bad)}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.help{border-top:1px dashed var(--line);padding-top:12px;color:var(--muted);text-align:center;font-size:15px}
+.help b{color:#fff;font-size:22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>شجرة القرار الإيجابي</h1><p>كل قرار إيجابي ... يصنع فرقاً</p></header>
+  <main class="card" id="panel" aria-live="polite"></main>
+</div>
+<script>
+(function(){
+  const CONFIG={server:"https://ntfy.sh",topic:"hq-tree-c3755fc45ef730ed"};
+  const PER=10;
+  const Q=[
+    {q:"ما هو الإدمان؟",o:["عادة سيئة يمكن تركها متى شئت","مرض مزمن يصيب الدماغ ويمكن علاجه","مشكلة تصيب ضعاف الشخصية فقط"],a:1,
+     e:"الإدمان يغيّر طريقة عمل الدماغ ويجعل التوقف صعبًا حتى مع الرغبة الصادقة، لكنه قابل للعلاج والتعافي."},
+    {q:"صديقك يقول: «جرّبها مرة وحدة، ما تضر». هل هذا صحيح؟",o:["صحيح، المرة الواحدة لا تؤثر","خطأ، التجربة الأولى قد تكون بداية الإدمان أو تسبب تسممًا","صحيح إذا كانت الكمية قليلة"],a:1,
+     e:"معظم المدمنين بدأوا بتجربة «مرة وحدة». وبعض المواد قد تسبب جرعة زائدة أو تسممًا من أول استخدام."},
+    {q:"هل الحبوب المنشطة (مثل الكبتاجون) تساعد على المذاكرة والتركيز؟",o:["نعم، تزيد التحصيل الدراسي","لا، تسبب الأرق والقلق والهلوسة وتنتهي بالإدمان","نعم، إذا استُخدمت أيام الاختبارات فقط"],a:1,
+     e:"الإحساس المؤقت بالنشاط يتبعه إرهاق شديد وضعف في التركيز والذاكرة، مع خطر الإدمان واضطرابات نفسية."},
+    {q:"يقال إن الحشيش «طبيعي من نبات» إذن هو آمن. ما رأيك؟",o:["صحيح، كل ما هو طبيعي آمن","خطأ، يضر بالذاكرة والتركيز ويرتبط بالاضطرابات النفسية","صحيح ما دام لا يُخلط بشيء آخر"],a:1,
+     e:"كون المادة من نبات لا يعني أنها آمنة. الحشيش يؤثر على الدماغ خاصة في سن المراهقة، ويرتبط بالقلق والذهان."},
+    {q:"عرض عليك أحدهم مادة مخدرة. ما أفضل تصرف؟",o:["أوافق حتى لا أُحرج أمام الأصدقاء","أرفض بوضوح وثقة وأبتعد عن المكان","آخذها وأرميها لاحقًا"],a:1,
+     e:"قل «لا» بوضوح دون تبرير طويل، وابتعد. الصديق الحقيقي لا يضغط عليك لتؤذي نفسك."},
+    {q:"أيٌّ مما يلي قد يكون علامة على تعاطي المخدرات؟",o:["تغيّر مفاجئ في السلوك والعزلة وتراجع الدراسة","الاهتمام بالرياضة والنوم المبكر","كثرة الجلوس مع العائلة"],a:0,
+     e:"من العلامات أيضًا: تغيّر الأصدقاء، اضطراب النوم والشهية، طلب المال باستمرار، وإهمال المظهر."},
+    {q:"هل يجوز أن تستخدم دواءً وُصف لشخص آخر؟",o:["نعم، إذا كانت الأعراض متشابهة","لا، الدواء يُصرف حسب حالة كل شخص وقد يسبب ضررًا أو إدمانًا","نعم، إذا كان من أحد أفراد العائلة"],a:1,
+     e:"بعض الأدوية المهدئة والمسكنة تسبب الإدمان. خذ الدواء فقط بوصفة من طبيبك وبالجرعة المحددة."},
+    {q:"ماذا يحدث عند خلط المخدرات مع أدوية أو مواد أخرى؟",o:["يقل تأثيرها","يتضاعف الخطر وقد يتوقف التنفس","لا يحدث شيء مختلف"],a:1,
+     e:"الخلط من أخطر الأمور؛ قد يؤدي إلى تثبيط التنفس وفقدان الوعي والوفاة."},
+    {q:"لاحظت أن صديقك بدأ يتعاطى. ماذا تفعل؟",o:["أتجاهل الموضوع، ليس من شأني","أتكلم معه بهدوء وأشجعه على طلب المساعدة، وأخبر شخصًا بالغًا أثق به","أفضحه أمام الجميع"],a:1,
+     e:"الدعم الهادئ دون لوم يفتح باب العلاج، وإشراك شخص بالغ موثوق (أهل، معلم، مرشد) يحمي صديقك."},
+    {q:"هل يمكن للمدمن أن يتعافى ويعود لحياته الطبيعية؟",o:["لا، الإدمان نهاية الطريق","نعم، بالعلاج المتخصص ودعم الأسرة والمجتمع","فقط إذا توقف وحده دون مساعدة"],a:1,
+     e:"التعافي ممكن، وطلب المساعدة شجاعة لا ضعف. العلاج المتخصص يرفع فرص النجاح كثيرًا."},
+    {q:"أي جزء من الجسم تؤثر عليه المخدرات أولًا وبشكل مباشر؟",o:["الجلد","الدماغ","الشعر"],a:1,
+     e:"المخدرات تعبث بنظام المكافأة في الدماغ، فيفقد الشخص الإحساس بالمتعة الطبيعية ويبحث عن المادة باستمرار."},
+    {q:"المروّج يعطيك المادة مجانًا في المرة الأولى. لماذا؟",o:["لأنه كريم ويحب مساعدتك","ليوقعك في الإدمان ثم تصبح زبونًا دائمًا","لأنها مادة غير ضارة"],a:1,
+     e:"«المجاني» أول مرة هو فخ. بعدها يصبح الشخص مضطرًا للدفع والبحث عن المادة بأي ثمن."},
+    {q:"هل المواد المستنشقة (مثل الغراء والبنزين) آمنة لأنها موجودة في البيت؟",o:["نعم، لأنها ليست مخدرات حقيقية","لا، قد تسبب تلفًا في الدماغ وقد تؤدي للوفاة المفاجئة من أول مرة","نعم، إذا استُنشقت بكمية قليلة"],a:1,
+     e:"استنشاق هذه المواد يحرم الدماغ من الأكسجين، وقد يسبب اضطرابًا مفاجئًا في ضربات القلب حتى من المرة الأولى."},
+    {q:"ما تأثير المخدرات على قيادة السيارة؟",o:["تجعل السائق أكثر انتباهًا","تبطئ ردة الفعل وتضعف التقدير وتسبب الحوادث","لا تأثير لها إذا كان السائق متمرسًا"],a:1,
+     e:"القيادة تحت تأثير أي مادة مخدرة خطر على السائق وعلى الآخرين في الطريق."},
+    {q:"شخص حزين ويقول إن المخدرات تنسيه همومه. ما الصحيح؟",o:["صحيح، هي حل سريع للحزن","خطأ، هي تزيد الاكتئاب والقلق وتضيف مشكلة جديدة","صحيح إذا كانت لفترة قصيرة"],a:1,
+     e:"الراحة المؤقتة يتبعها حزن وقلق أشد. الحديث مع شخص تثق به أو مختص هو الطريق الصحيح."},
+    {q:"ما هي أعراض الانسحاب؟",o:["شعور بالسعادة بعد ترك المادة","أعراض جسدية ونفسية تظهر عند التوقف عن المادة وتحتاج متابعة طبية","علامة على الشفاء التام"],a:1,
+     e:"قد تشمل الأرق والتعرق والقلق والآلام. لذلك يُنصح أن يكون التوقف تحت إشراف طبي متخصص."},
+    {q:"ما أفضل طريقة لاستثمار وقت الفراغ وحماية نفسك؟",o:["السهر في الشوارع مع أي أحد","ممارسة الرياضة والهوايات ومرافقة الأصدقاء الإيجابيين","البقاء وحيدًا دائمًا"],a:1,
+     e:"الفراغ والرفقة السيئة من أكبر أسباب الوقوع في المخدرات. الهوايات والرياضة تملأ الوقت بشيء مفيد."},
+    {q:"ما دور الأسرة في الوقاية من المخدرات؟",o:["لا دور لها، المسؤولية على المدرسة فقط","الحوار والاحتواء ومعرفة أصدقاء الأبناء ومتابعتهم","العقاب الشديد فقط"],a:1,
+     e:"الأسرة القريبة من أبنائها، التي تسمع لهم وتحاورهم، هي خط الدفاع الأول ضد المخدرات."},
+    {q:"إذا تقدم المدمن بنفسه أو أهله لطلب العلاج، ماذا يحدث؟",o:["يُعاقب فورًا","يُشجَّع على العلاج ويُعامل كمريض يحتاج المساعدة","لا يُقبل علاجه"],a:1,
+     e:"طلب العلاج خطوة شجاعة، والجهات المختصة ترحب بمن يأتي طالبًا المساعدة وتتعامل معه بسرية."},
+    {q:"التدخين في سن صغيرة له علاقة بالمخدرات؟",o:["لا علاقة بينهما أبدًا","قد يكون بوابة تزيد احتمال تجربة مواد أخطر","التدخين يحمي من المخدرات"],a:1,
+     e:"من يبدأ التدخين مبكرًا يكون أكثر عرضة لتجربة مواد أخرى. الابتعاد عن التدخين حماية مبكرة."}
+  ];
+  const LET=["أ","ب","ج","د"];
+  const $=s=>document.querySelector(s);
+  const panel=$("#panel");
+  const fmt=n=>Number(n).toLocaleString("ar-SA");
+  const leaves=n=>n===1?"ورقة":(n>=3&&n<=10?"أوراق":"ورقة");
+  const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const LEAF='<svg viewBox="0 0 64 64" aria-hidden="true"><defs><radialGradient id="lg" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#f0fff6"/><stop offset=".5" stop-color="#9fea7a"/><stop offset="1" stop-color="#2fa451"/></radialGradient></defs><path d="M32 60C14 46 12 22 32 4c20 18 18 42 0 56z" fill="url(#lg)" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/><path d="M32 58C33 40 33 24 32 8" stroke="#fff" stroke-opacity=".6" stroke-width="1.5" fill="none"/></svg>';
+  // remember which questions this phone has seen, so "another question" is always new
+  const SEEN="hqTreeSeen";
+  function seen(){try{return JSON.parse(localStorage.getItem(SEEN)||"[]")}catch(e){return[]}}
+  function pick(){
+    let s=seen();if(s.length>=Q.length)s=[];
+    const pool=Q.map((_,i)=>i).filter(i=>s.indexOf(i)<0);
+    const i=pool[Math.floor(Math.random()*pool.length)];
+    s.push(i);try{localStorage.setItem(SEEN,JSON.stringify(s))}catch(e){}
+    return i;
+  }
+  let cur=null,count=0,mine=0;
+
+  function showStart(){
+    panel.innerHTML=`<div class="hero">${LEAF}<b>حياتك قرار</b></div>
+      <p class="lead">أجب عن سؤال توعوي واحد. إذا اخترت القرار الصحيح تضيء ورقتك على شجرة الملتقى.</p>
+      <button class="btn" id="go">ابدأ</button>`;
+    $("#go").onclick=showQ;
+  }
+  function showQ(){
+    const q=Q[pick()];
+    cur={...q,opts:shuffle(q.o.map((t,k)=>({t,ok:k===q.a})))};
+    panel.innerHTML=`<div class="eyebrow"><span>${count?`سؤال جديد · أضأت ${fmt(mine)} ${leaves(mine)} حتى الآن`:"اختر قرارك الإيجابي"}</span></div>
+      <p class="q">${cur.q}</p><div class="opts">${cur.opts.map((o,k)=>`<button class="opt" data-k="${k}"><span class="k">${LET[k]}</span><span>${o.t}</span></button>`).join("")}</div>`;
+    panel.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+    window.scrollTo({top:0});
+  }
+  function answer(k){
+    const ok=cur.opts[k].ok;count++;if(ok)mine++;
+    panel.querySelectorAll(".opt").forEach((b,i)=>{b.disabled=true;
+      if(cur.opts[i].ok)b.classList.add("right");else if(i===k)b.classList.add("wrong");else b.classList.add("dim")});
+    const fb=document.createElement("div");fb.className="fb "+(ok?"good":"bad");
+    fb.innerHTML=`<strong>${ok?"قرار إيجابي!":"إجابة غير صحيحة"}</strong>${cur.e}`;
+    const st=document.createElement("div");st.className="status wait";st.innerHTML='<span class="spin"></span><span>جاري الإرسال إلى الشجرة…</span>';
+    const help=document.createElement("div");help.className="help";help.innerHTML='إذا كنت أنت أو أحد تعرفه بحاجة إلى مساعدة، اتصل بمركز استشارات الإدمان: <b>1955</b>';
+    const nx=document.createElement("button");nx.className="btn";nx.textContent="سؤال آخر";nx.onclick=showQ;
+    panel.append(fb,st,nx,help);setTimeout(()=>st.scrollIntoView({behavior:"smooth",block:"center"}),50);
+    send(ok?1:0,st,ok,0);
+  }
+  function send(s,st,ok,tries){
+    fetch(`${CONFIG.server}/${CONFIG.topic}`,{method:"POST",body:JSON.stringify({s})})
+      .then(r=>{if(!r.ok)throw new Error(r.status);
+        st.className="status ok";st.textContent=ok?"انظر إلى الشاشة، ورقتك تضيء الآن على الشجرة!":"شكراً لمشاركتك! جرّب سؤالاً آخر وأضئ ورقتك"})
+      .catch(()=>{
+        if(tries<3){setTimeout(()=>send(s,st,ok,tries+1),1500*(tries+1));return}
+        st.className="status err";
+        st.innerHTML='<span>تعذّر الإرسال. تأكد من اتصالك بالإنترنت</span><button class="btn ghost" style="width:auto;padding:4px 14px;font-size:16px">أعد المحاولة</button>';
+        st.querySelector("button").onclick=()=>{st.className="status wait";st.innerHTML='<span class="spin"></span><span>جاري الإرسال…</span>';send(s,st,ok,0)};
+      });
+  }
+  showStart();
+})();
+</script>
+</body>
+</html>
