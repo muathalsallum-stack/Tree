@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b2a2d">
+<title>لوحة التحكم – شجرة القرار الإيجابي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --ink:#f3fbf8;--muted:#b9d6d0;--glass:rgba(9,45,50,.78);--line:rgba(190,240,232,.28);
+  --mint:#7df0c2;--leaf:#8fe36a;--sun:#f4c54a;--ok:#7fe39a;--bad:#ff8b7b;
+  --f-display:"Cairo","IBM Plex Sans Arabic",Tahoma,sans-serif;--f-body:"IBM Plex Sans Arabic","Cairo",Tahoma,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{min-height:100%;background:#0b1a1c}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background:linear-gradient(160deg,#0f1517 0%,#123236 50%,#1f5d64 100%);background-attachment:fixed;
+  padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:clamp(22px,4vw,30px);line-height:1.2}
+h1 small{display:block;font-size:.55em;color:var(--muted);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.card{background:var(--glass);border:1.5px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card h2{margin:0;font-family:var(--f-display);font-weight:800;font-size:19px;display:flex;align-items:center;gap:8px}
+.card p{margin:0}
+.muted{color:var(--muted);font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:rgba(255,255,255,.06);border-radius:14px;padding:10px 12px}
+.stat span{display:block;color:var(--muted);font-size:13px}
+.stat b{font-family:var(--f-display);font-size:26px;font-variant-numeric:tabular-nums;line-height:1.3}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;background:rgba(255,255,255,.08)}
+.pill i{width:9px;height:9px;border-radius:50%;background:#e0a33a}
+.pill.ok i{background:var(--ok)} .pill.off i{background:var(--bad)}
+.pill.open{background:rgba(127,227,154,.18);color:var(--ok)} .pill.closed{background:rgba(244,197,74,.16);color:var(--sun)}
+label{font-weight:700;font-size:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.stepper{display:flex;gap:6px;align-items:stretch}
+.stepper input{flex:1;min-width:84px;text-align:center;font:inherit;font-family:var(--f-display);font-size:24px;font-weight:800;color:var(--ink);
+  background:rgba(0,0,0,.25);border:1.5px solid var(--line);border-radius:12px;padding:6px;font-variant-numeric:tabular-nums}
+.sbtn{flex:none;min-width:42px;font:inherit;font-weight:700;color:var(--ink);background:rgba(255,255,255,.08);border:1.5px solid var(--line);border-radius:12px;cursor:pointer;padding:0 8px}
+.sbtn:hover{border-color:var(--mint)}
+.btn{font:inherit;font-family:var(--f-display);font-weight:800;font-size:18px;cursor:pointer;border:none;border-radius:14px;padding:11px 18px;
+  background:linear-gradient(180deg,#a9f7cf,#4fd6b4);color:#06302c}
+.btn.gold{background:linear-gradient(180deg,#ffe9a6,#f4c54a);color:#3a2800}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.danger{background:linear-gradient(180deg,#ffb3a8,#f07a6a);color:#3b0a05}
+.btn[disabled]{opacity:.55;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row .btn{flex:1 1 auto}
+.btn:focus-visible,.sbtn:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.qrwrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#oqr{background:#fff;border-radius:14px;padding:10px;width:170px;height:170px;flex:none}
+#oqr img,#oqr canvas{width:100%!important;height:auto!important;display:block}
+.link{direction:ltr;text-align:left;font-size:12px;color:var(--muted);word-break:break-all;background:rgba(0,0,0,.25);border-radius:10px;padding:8px;user-select:all}
+.confirm{border:1.5px solid var(--bad);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;background:rgba(255,139,123,.08)}
+.toast{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:5;
+  background:#0c3b36;border:1.5px solid var(--mint);border-radius:999px;padding:8px 20px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:calc(100% - 32px);text-align:center}
+.toast.err{border-color:var(--bad);background:#3b1512}
+/* lock */
+.lock{max-width:380px;margin:12vh auto 0;text-align:center}
+.lock input{width:100%;text-align:center;font:inherit;font-family:var(--f-display);font-size:30px;letter-spacing:.3em;color:var(--ink);
+  background:rgba(0,0,0,.28);border:1.5px solid var(--line);border-radius:14px;padding:10px;direction:ltr}
+.err{color:var(--bad);font-weight:700;min-height:1.5em}
+.full-on{color:var(--sun);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <form class="card lock" id="lock" autocomplete="off">
+    <h1>لوحة التحكم<small>شجرة القرار الإيجابي</small></h1>
+    <label for="pin">أدخل الرقم السري</label>
+    <input id="pin" type="password" inputmode="numeric" maxlength="12" autofocus>
+    <p class="err" id="perr"></p>
+    <button class="btn" type="submit">دخول</button>
+  </form>
+
+  <div id="panel" hidden>
+    <header>
+      <h1>لوحة التحكم<small>شجرة القرار الإيجابي · ملتقى حياتك قرار</small></h1>
+      <button class="btn ghost" id="logout" type="button">خروج</button>
+    </header>
+
+    <div class="grid" style="margin-top:16px">
+      <section class="card">
+        <h2>حالة الشاشة</h2>
+        <div class="row"><span class="pill" id="conn"><i></i><span>بانتظار أول تحديث من الشاشة…</span></span><span class="pill" id="phase">—</span></div>
+        <div class="stats">
+          <div class="stat"><span>القرارات الإيجابية</span><b id="sTotal">—</b></div>
+          <div class="stat"><span>المشاركات</span><b id="sPeople">—</b></div>
+          <div class="stat"><span>مشاركات اليوم</span><b id="sToday">—</b></div>
+        </div>
+        <p class="muted" id="sFull"></p>
+        <p class="muted">الشاشة ترسل حالتها بعد كل تعديل من هنا، وكل ١٠ دقائق.</p>
+      </section>
+
+      <section class="card">
+        <h2>الافتتاح</h2>
+        <p class="muted">رابط خاص بالمسؤول. يمسح هذا الرمز بجواله، فيظهر له زر «افتتاح» كبير. لا تشاركه مع الحضور.</p>
+        <div class="qrwrap"><div id="oqr"></div>
+          <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:8px">
+            <div class="link" id="olink"></div>
+            <button class="btn ghost" id="copy" type="button">نسخ رابط الافتتاح</button>
+          </div>
+        </div>
+        <button class="btn gold" id="openNow" type="button">افتتح الشجرة الآن من هنا</button>
+      </section>
+
+      <section class="card">
+        <h2>الأعداد على الشاشة</h2>
+        <div class="field"><label for="nTotal">القرارات الإيجابية (الأوراق المضيئة)</label>
+          <div class="stepper"><button class="sbtn" data-f="nTotal" data-d="-10" type="button">−١٠</button><button class="sbtn" data-f="nTotal" data-d="-1" type="button">−١</button>
+            <input id="nTotal" type="number" min="0" inputmode="numeric" value="0">
+            <button class="sbtn" data-f="nTotal" data-d="1" type="button">+١</button><button class="sbtn" data-f="nTotal" data-d="10" type="button">+١٠</button></div></div>
+        <div class="field"><label for="nPeople">المشاركات</label>
+          <div class="stepper"><button class="sbtn" data-f="nPeople" data-d="-10" type="button">−١٠</button><button class="sbtn" data-f="nPeople" data-d="-1" type="button">−١</button>
+            <input id="nPeople" type="number" min="0" inputmode="numeric" value="0">
+            <button class="sbtn" data-f="nPeople" data-d="1" type="button">+١</button><button class="sbtn" data-f="nPeople" data-d="10" type="button">+١٠</button></div></div>
+        <button class="btn" id="apply" type="button">تطبيق على الشاشة</button>
+        <p class="muted">الشجرة فيها ٢٠٠ ورقة. أي رقم من ٢٠٠ وفوق يضيئها كاملة.</p>
+      </section>
+
+      <section class="card">
+        <h2>إضاءة الشجرة كاملة</h2>
+        <p class="muted">تضيء كل الأوراق فوراً دون تغيير الأعداد. مفيدة إذا قلّت المشاركات أو عند ختام الملتقى.</p>
+        <div class="row">
+          <button class="btn gold" id="fullOn" type="button">أضئ الشجرة كاملة</button>
+          <button class="btn ghost" id="fullOff" type="button">أرجعها حسب الإجابات</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>تصفير</h2>
+        <p class="muted">يمسح الأعداد ويرجّع الشجرة رمادية بالكامل بانتظار الافتتاح من جديد.</p>
+        <button class="btn danger" id="reset" type="button">تصفير كل شيء</button>
+        <div class="confirm" id="confirm" hidden>
+          <p><b>متأكد؟</b> سيُمسح عدد القرارات والمشاركات، وترجع الشجرة رمادية قبل الافتتاح.</p>
+          <div class="row"><button class="btn danger" id="resetYes" type="button">نعم، صفّر</button><button class="btn ghost" id="resetNo" type="button">إلغاء</button></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  const CONFIG={server:"https://ntfy.sh",topic:"hq-tree-c3755fc45ef730ed"};
+  const H_ADMIN="8d6bf174bef3aeebbd1cf0821e0785dd7de9b666a02765cfad6a053b6ca94381";
+  const SALT="hq-tree",SK="hqTreeAdmin";
+  const $=s=>document.querySelector(s);
+  const fmt=n=>Number(n).toLocaleString("ar-SA");
+  async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,"0")).join("")}
+  let ADM="",OPEN="";
+
+  /* ---------- lock ---------- */
+  async function unlock(pin,silent){
+    const adm=await sha(`admin:${pin}:${SALT}`);
+    if(await sha(adm)!==H_ADMIN){if(!silent)$("#perr").textContent="الرقم السري غير صحيح";return false}
+    ADM=adm;OPEN=await sha(`open:${pin}:${SALT}`);
+    try{sessionStorage.setItem(SK,pin)}catch(e){}
+    $("#lock").hidden=true;$("#panel").hidden=false;start();return true;
+  }
+  $("#lock").addEventListener("submit",e=>{e.preventDefault();$("#perr").textContent="";unlock($("#pin").value.trim(),false)});
+  $("#logout").onclick=()=>{try{sessionStorage.removeItem(SK)}catch(e){}location.reload()};
+  try{const p=sessionStorage.getItem(SK);if(p)unlock(p,true)}catch(e){}
+
+  /* ---------- helpers ---------- */
+  let tt=0;function toast(t,bad){const el=$("#toast");el.textContent=t;el.className="toast"+(bad?" err":"");el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{el.hidden=true},3200)}
+  function send(obj,okText){
+    return fetch(`${CONFIG.server}/${CONFIG.topic}`,{method:"POST",body:JSON.stringify(Object.assign({k:ADM},obj))})
+      .then(r=>{if(!r.ok)throw 0;toast(okText||"تم الإرسال إلى الشاشة")})
+      .catch(()=>toast("تعذّر الإرسال. تأكد من الإنترنت وحاول مرة أخرى",true));
+  }
+  const val=id=>Math.max(0,Math.round(Number($("#"+id).value)||0));
+
+  /* ---------- screen status ---------- */
+  let last=null,lastAt=0,touched=false;
+  function renderStatus(){
+    const c=$("#conn");
+    if(!lastAt){c.className="pill";c.lastElementChild.textContent="بانتظار أول تحديث من الشاشة…"}
+    else{const mins=Math.floor((Date.now()-lastAt)/60000),fresh=mins<=15;
+      c.className="pill "+(fresh?"ok":"off");
+      c.lastElementChild.textContent=(fresh?"الشاشة متصلة":"لا يوجد تحديث حديث من الشاشة")+" · "+(mins<1?"الآن":`قبل ${fmt(mins)} دقيقة`)}
+    if(!last)return;
+    const p=$("#phase");p.className="pill "+(last.st==="open"?"open":"closed");p.textContent=last.st==="open"?"الشجرة مفتوحة":"قبل الافتتاح";
+    $("#sTotal").textContent=fmt(last.total||0);$("#sPeople").textContent=fmt(last.people||0);$("#sToday").textContent=fmt(last.today||0);
+    $("#sFull").innerHTML=last.full?'<span class="full-on">الإضاءة الكاملة مفعّلة الآن</span>':"الإضاءة حسب الإجابات";
+    if(!touched){$("#nTotal").value=last.total||0;$("#nPeople").value=last.people||0}
+  }
+  function listen(){
+    const es=new EventSource(`${CONFIG.server}/${CONFIG.topic}/sse?since=all`);
+    es.onmessage=e=>{let m,d;try{m=JSON.parse(e.data);d=JSON.parse(m.message)}catch(_){return}
+      if(m.event==="message"&&d&&d.st){last=d;lastAt=m.time*1000;renderStatus()}};
+    es.onerror=()=>{try{es.close()}catch(e){}setTimeout(listen,4000)};
+  }
+
+  /* ---------- controls ---------- */
+  function start(){
+    const url=new URL("play.html",location.href).href+"#"+OPEN;
+    $("#olink").textContent=url;
+    if(window.QRCode)new QRCode($("#oqr"),{text:url,width:400,height:400,colorDark:"#0b3b38",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+    else $("#oqr").textContent="تعذّر تحميل الرمز";
+    $("#copy").onclick=()=>{
+      const done=()=>toast("تم نسخ رابط الافتتاح");
+      const fallback=()=>{const r=document.createRange();r.selectNodeContents($("#olink"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("الرابط محدد، انسخه يدوياً")};
+      try{navigator.clipboard.writeText(url).then(done,fallback)}catch(e){fallback()}
+    };
+    $("#openNow").onclick=()=>send({cmd:"open"},"تم إرسال الافتتاح، انظر إلى الشاشة");
+    document.querySelectorAll(".sbtn").forEach(b=>b.onclick=()=>{touched=true;const f=b.dataset.f;$("#"+f).value=Math.max(0,val(f)+Number(b.dataset.d))});
+    ["nTotal","nPeople"].forEach(id=>$("#"+id).addEventListener("input",()=>{touched=true}));
+    $("#apply").onclick=()=>{send({cmd:"set",total:val("nTotal"),people:val("nPeople")},"تم تحديث الأعداد على الشاشة");touched=false};
+    $("#fullOn").onclick=()=>send({cmd:"full",on:true},"الشجرة تضيء كاملة الآن");
+    $("#fullOff").onclick=()=>send({cmd:"full",on:false},"رجعت الإضاءة حسب الإجابات");
+    $("#reset").onclick=()=>{$("#confirm").hidden=false;$("#reset").hidden=true};
+    $("#resetNo").onclick=()=>{$("#confirm").hidden=true;$("#reset").hidden=false};
+    $("#resetYes").onclick=()=>{send({cmd:"reset"},"تم التصفير، الشجرة بانتظار الافتتاح");$("#confirm").hidden=true;$("#reset").hidden=false;touched=false};
+    listen();setInterval(renderStatus,30000);
+  }
+})();
+</script>
+</body>
+</html>
